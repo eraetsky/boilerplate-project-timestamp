@@ -35,6 +35,13 @@ server.get("/api/:date", function (req, res) {
     res.json({"unix": unix.timestamp, "utc": utc});
   }
   else {
+    const date = new Date(req.params.date);
+    if (date){
+        const unix = date.getTime();
+        const utc = date.toUTCString();
+        res.json({"unix": unix, "utc": utc});
+        return;
+    }
     res.json({"error": "Invalid Date"});
   }
 });
