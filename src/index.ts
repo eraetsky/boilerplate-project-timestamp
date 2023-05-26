@@ -16,12 +16,17 @@ server.get("/", function (req, res) {
 
 server.get("/api/:date", function (req, res) {
   const dateString = req.params.date;
-  const timestamp = Date.parse(dateString);
-  if (timestamp){
-    const date = new Date(timestamp);
-    const unix = date.getTime();
-    const utc = date.toUTCString();
+  const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (dateFormatRegex.test(dateString)){
+    const date = { date: dateString } as DateFormat;
+    const unix = new Date(date.date).getTime();
+    const utc = new Date(date.date).toUTCString();
     res.json({"unix": unix, "utc": utc});
+  }
+  else if (parseInt(dateString)){
+    const unix = {timestamp: parseInt(dateString)} as UnixTimestamp;
+    const utc = new Date(unix.timestamp).toUTCString();
+    res.json({"unix": unix.timestamp, "utc": utc});
   }
   else {
     res.json({"Error": "Invalid date format"});
