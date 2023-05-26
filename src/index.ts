@@ -29,7 +29,7 @@ server.get("/api/:date", function (req, res) {
     res.json({"unix": unix.timestamp, "utc": utc});
   }
   else {
-    res.json({"Error": "Invalid date format"});
+    res.json({"error": "Invalid Date"});
   }
 });
 
