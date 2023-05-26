@@ -1,18 +1,30 @@
 import express from "express"
 import cors from "cors"
 
+require('dotenv').config();
+
 const server = express()
 server.use(cors({optionsSuccessStatus: 200}));
 
 server.use(express.static('public'));
 
 server.get("/", function (req, res) {
-  res.sendFile(__dirname + '/views/index.html');
+    res.sendFile('index.html', { root: "views" });
 });
 
 
-server.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+server.get("/api/:date", function (req, res) {
+  const dateString = req.params.date;
+  const timestamp = Date.parse(dateString);
+  if (timestamp){
+    const date = new Date(timestamp);
+    const unix = date.getTime();
+    const utc = date.toUTCString();
+    res.json({"unix": unix, "utc": utc});
+  }
+  else {
+    res.json({"Error": "Invalid date format"});
+  }
 });
 
 
