@@ -13,6 +13,12 @@ server.get("/", function (req, res) {
     res.sendFile('index.html', { root: "views" });
 });
 
+server.get("/api", function (req,res) {
+    const date = new Date();
+    const unix = date.getTime();
+    const utc = date.toUTCString();
+    res.json({"unix": unix, "utc": utc});
+})
 
 server.get("/api/:date", function (req, res) {
   const dateString = req.params.date;
